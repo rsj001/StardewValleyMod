@@ -12,17 +12,16 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: '6.0.x'
 
     - name: Detect changed projects
       id: detect
       run: |
-        echo "Detecting changed projects..."
         CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | cut -d'/' -f1 | sort | uniq)
         echo "Changed projects: $CHANGED"
         echo "changed_projects=$CHANGED" >> $GITHUB_OUTPUT
@@ -44,7 +43,7 @@ jobs:
         done
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: Project-Mod-ZIP
         path: ./artifacts/**
