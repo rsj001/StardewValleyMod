@@ -24,9 +24,24 @@ jobs:
     - name: Detect changed projects
       id: detect
       run: |
-        CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | cut -d'/' -f1 | sort | uniq)
-        echo "Changed projects: $CHANGED"
-        echo "changed_projects=$CHANGED" >> $GITHUB_OUTPUT
+        if [ "${{ github.event_name }}" = "push" ]; then
+          BEFORE_SHA=${{ github.event.before }}
+          AFTER_SHA=${{ github.sha }}
+        elif [ "${{ github.event_name }}" = "pull_request" ]; then
+          BEFORE_SHA=${{ github.event.pull_request.base.sha }}
+          AFTER_SHA=${{ github.event.pull_request.head.sha }}
+        else
+          echo "Unsupported event ${{ github.event_name }}"
+          exit 1
+        CHANGED=$(git diff --name-only $BEFORE_SHA $AFTER_SHA | cut -d'/' -f1 | sort | uniq)
+        VALID_PROJECTS=()
+        for proj in $CHANGED; do
+          if [ -f "$proj/$proj.csproj" ]; then
+            VALID_PROJECTS+=($proj)
+          fi
+        done
+        echo "Changed projects: $VALID_PROJECTS"
+        echo "changed_projects=$VALID_PROJECTS" >> $GITHUB_OUTPUT
 
     - name: Build and zip changed projects
       run: |
