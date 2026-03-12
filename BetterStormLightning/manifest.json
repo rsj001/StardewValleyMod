@@ -1,0 +1,10 @@
+{
+  "Name": "Better Storm and Lightning",
+  "Author": "rsjww",
+  "Version": "1.0.6",
+  "Description": "Add craftable Lightning Totem and Storm Totem to the game, along with options to control how lightning behaves during storms.",
+  "UniqueID": "rsjww.BetterStormLightning",
+  "EntryDll": "BetterStormLightning.dll",
+  "MinimumApiVersion": "4.1.7",
+  "UpdateKeys":  [ "Nexus:42540" ]
+}

@@ -1,0 +1,10 @@
+{
+  "Name": "Mergable Machines",
+  "Author": "rsjww",
+  "Version": "0.1.3",
+  "Description": "Stack identical machines into one tile to reduce clutter and simplify machine management.",
+  "UniqueID": "rsjww.MergableMachines",
+  "EntryDll": "MergableMachines.dll",
+  "MinimumApiVersion": "4.1.7",
+  "UpdateKeys":  [ "Nexus:43279" ]
+}

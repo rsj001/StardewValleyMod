@@ -1,0 +1,32 @@
+{
+    "gmcm.general": "Général",
+    "tree_tired": "L’arbre a l’air un peu épuisé.",
+    "hit_max_stack": "Vous ne pouvez pas fusionner plus de {0} machines.",
+    "machine_occupied": "Cette machine est occupée pour le moment.",
+    "gmcm.max_stack": "Taille maximale de fusion",
+    "gmcm.max_stack.tooltip": "Nombre maximal de machines dans une même pile. Réglez sur 1 pour désactiver la fusion.",
+    "gmcm.opacity": "Opacité du nombre de pile",
+    "gmcm.opacity.tooltip": "Opacité du nombre indiquant la taille de la pile. Réglez sur 0 pour le masquer.",
+ 
+    "gmcm.force_stack": "Forcer l’empilement",
+    "gmcm.force_stack_mode": "Mode d’empilement forcé",
+    "gmcm.force_stack_mode.tooltip": "Désactivé — Aucun empilement forcé.\nTouche requise — Maintenez la touche pour forcer l’empilement.\nToujours — L’empilement forcé est toujours activé. Espérons que c’est bien ce que vous voulez.",
+    "gmcm.disable": "Désactivé",
+    "gmcm.require_key": "Touche requise (configurée ci-dessous)",
+    "gmcm.always": "Toujours",
+ 
+    "gmcm.force_stack_keybind": "Touche pour forcer l’empilement",
+    "gmcm.force_stack_keybind.tooltip": "Touche utilisée pour forcer l’empilement. Par défaut : Q.",
+    "gmcm.stack_tappers": "Autoriser l’empilement des entailles",
+    "gmcm.stack_tappers.tooltip": "Permet de placer plusieurs entailles sur un même arbre. L’arbre fera de son mieux.",
+ 
+    "gmcm.quickstack": "Empilement rapide",
+    "gmcm.quickstack999_keybind": "Touche empilement rapide 999",
+    "gmcm.quickstack999_keybind.tooltip": "Touche utilisée pour empiler instantanément 999 objets dans une machine.",
+    "gmcm.quickstack25_keybind": "Touche empilement rapide 25",
+    "gmcm.quickstack25_keybind.tooltip": "Touche utilisée pour empiler instantanément 25 objets dans une machine.",
+    "gmcm.quickstack5_keybind": "Touche empilement rapide 5",
+    "gmcm.quickstack5_keybind.tooltip": "Touche utilisée pour empiler instantanément 5 objets dans une machine.",
+ 
+    "gmcm.machine": "Activer la fusion des machines pour :"
+}

@@ -1,0 +1,33 @@
+{
+    "gmcm.general": "General",
+    "tree_tired": "The tree looks a little tired.",
+    "hit_max_stack": "You can't merge more than {0} machines.",
+    "machine_occupied": "This machine is busy right now.",
+    "gmcm.max_stack": "Max Merge Size",
+    "gmcm.max_stack.tooltip": "Maximum machines in one stack. Set to 1 to disable merging.",
+    "gmcm.opacity": "Merge Digit Opacity",
+    "gmcm.opacity.tooltip": "Opacity of the stack number. Set to 0 to hide it.",
+
+    "gmcm.force_stack": "Force Stack",
+    "gmcm.force_stack_mode": "Force Stack Mode",
+    "gmcm.force_stack_mode.tooltip": "Disabled — No force stacking.\nRequire Key — Hold the key to force stack.\nAlways — Force stacking is always enabled. Hope you meant it.",
+    "gmcm.disable": "Disabled",
+    "gmcm.require_key": "Require Key (Configured below)",
+    "gmcm.always": "Always",
+    
+    "gmcm.force_stack_keybind": "Force Stack Key",
+    "gmcm.force_stack_keybind.tooltip": "Key used for force stacking. Default: Q.",
+    "gmcm.stack_tappers": "Allow Tapper Stacking",
+    "gmcm.stack_tappers.tooltip": "Allows multiple tappers on one tree. The tree will try its best.",
+
+    "gmcm.quickstack": "Quick Stack",
+    "gmcm.quickstack999_keybind": "Quick Stack 999 Key",
+    "gmcm.quickstack999_keybind.tooltip": "Key used to instantly stack 999 items into a machine.",
+    "gmcm.quickstack25_keybind": "Quick Stack 25 Key",
+    "gmcm.quickstack25_keybind.tooltip": "Key used to instantly stack 25 items into a machine.",
+    "gmcm.quickstack5_keybind": "Quick Stack 5 Key",
+    "gmcm.quickstack5_keybind.tooltip": "Key used to instantly stack 5 items into a machine.",
+
+
+    "gmcm.machine": "Enable Machine Merge For:"
+}

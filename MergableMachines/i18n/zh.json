@@ -1,0 +1,32 @@
+{
+    "gmcm.general": "通用",
+    "tree_tired": "这棵树看起来有点累了。",
+    "hit_max_stack": "最多只能合并 {0} 台机器。",
+    "machine_occupied": "这台机器现在正忙着工作。",
+    "gmcm.max_stack": "最大合并数量",
+    "gmcm.max_stack.tooltip": "一组最多可以合并多少台机器。设为 1 可禁用合并。",
+    "gmcm.opacity": "合并数字透明度",
+    "gmcm.opacity.tooltip": "堆叠数量数字的透明度。设为 0 可隐藏。",
+
+    "gmcm.force_stack": "强制堆叠",
+    "gmcm.force_stack_mode": "强制堆叠模式",
+    "gmcm.force_stack_mode.tooltip": "禁用 — 不允许强制堆叠。\n按键触发 — 按住指定按键时才会强制堆叠。\n始终启用 — 始终允许强制堆叠。",
+    "gmcm.disable": "禁用",
+    "gmcm.require_key": "按键触发（在下方设置）",
+    "gmcm.always": "始终启用",
+
+    "gmcm.force_stack_keybind": "强制堆叠按键",
+    "gmcm.force_stack_keybind.tooltip": "用于强制堆叠的按键。默认Q。",
+    "gmcm.stack_tappers": "允许树液采集器堆叠",
+    "gmcm.stack_tappers.tooltip": "允许在同一棵树上使用多个采集器。不过树可能会有点辛苦。",
+
+    "gmcm.quickstack": "快速堆叠",
+    "gmcm.quickstack999_keybind": "快速堆叠 999 按键",
+    "gmcm.quickstack999_keybind.tooltip": "按下此键将 999 个物品一次性堆叠进机器。",
+    "gmcm.quickstack25_keybind": "快速堆叠 25 按键",
+    "gmcm.quickstack25_keybind.tooltip": "按下此键将 25 个物品一次性堆叠进机器。",
+    "gmcm.quickstack5_keybind": "快速堆叠 5 按键",
+    "gmcm.quickstack5_keybind.tooltip": "按下此键将 5 个物品一次性堆叠进机器。",
+
+    "gmcm.machine": "为以下机器启用合并："
+}

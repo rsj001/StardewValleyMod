@@ -1,0 +1,12 @@
+{
+    "gmcm.stack_interval": "Stack Interval",
+    "gmcm.stack_interval.tooltip": "The interval between stacking items (in ticks, normally ~60 ticks/s). Defaults to 60 ticks.",
+    "gmcm.max_slot": "Max Slot",
+    "gmcm.max_slot.tooltip": "The maximum number of items with same name and quality to stack in a machine. Set to 0 to disable stacking. Recommended to set to 1 for a more balanced gameplay, but you can set it higher if you want machines to be more efficient.",
+    "gmcm.machine": "Enable Auto-stacking For:",
+    "gmcm.tell_qi.tooltip": "Mr. Qi is curious about your automation setup!",
+    "gmcm.tell_qi": "Qi's Help",
+
+    "qimail": "I see you've been automating your farm. Smart choice — though a shortcut if I'm honest.^I've sent a Hopper to your farm. Use them wisely, kid.^  Your friend, Mr. Qi",
+    "qimail.name": "Qi's Gift For Automate"
+}

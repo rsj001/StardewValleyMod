@@ -1,0 +1,9 @@
+{
+  "Name": "Truffle Crab Spawn Probability",
+  "Author": "rsjww",
+  "Version": "1.0.0",
+  "Description": "Adjust spawn probability for truffle crabs.",
+  "UniqueID": "rsjww.TruffleCrabSpawn",
+  "EntryDll": "TruffleCrabSpawn.dll",
+  "MinimumApiVersion": "4.5.0"
+}
