@@ -1,0 +1,42 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalancedAutomate", "BalancedAutomate\BalancedAutomate.csproj", "{192203B0-FE1F-D08F-DF76-CD8CDFC6A4DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterStormLightning", "BetterStormLightning\BetterStormLightning.csproj", "{40DDDEA2-C6F5-85F6-A74A-A0D5702F0438}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MergableMachines", "MergableMachines\MergableMachines.csproj", "{5E44DFEB-23E9-38D3-16A4-AB731B4EAA3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruffleCrabSpawn", "TruffleCrabSpawn\TruffleCrabSpawn.csproj", "{556702C6-9823-5314-F850-D05A605EAB83}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{192203B0-FE1F-D08F-DF76-CD8CDFC6A4DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{192203B0-FE1F-D08F-DF76-CD8CDFC6A4DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{192203B0-FE1F-D08F-DF76-CD8CDFC6A4DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{192203B0-FE1F-D08F-DF76-CD8CDFC6A4DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40DDDEA2-C6F5-85F6-A74A-A0D5702F0438}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40DDDEA2-C6F5-85F6-A74A-A0D5702F0438}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40DDDEA2-C6F5-85F6-A74A-A0D5702F0438}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40DDDEA2-C6F5-85F6-A74A-A0D5702F0438}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E44DFEB-23E9-38D3-16A4-AB731B4EAA3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E44DFEB-23E9-38D3-16A4-AB731B4EAA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E44DFEB-23E9-38D3-16A4-AB731B4EAA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E44DFEB-23E9-38D3-16A4-AB731B4EAA3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{556702C6-9823-5314-F850-D05A605EAB83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{556702C6-9823-5314-F850-D05A605EAB83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{556702C6-9823-5314-F850-D05A605EAB83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{556702C6-9823-5314-F850-D05A605EAB83}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A3D2CE76-D9FC-4978-A56F-FADD2A738CFF}
+	EndGlobalSection
+EndGlobal
