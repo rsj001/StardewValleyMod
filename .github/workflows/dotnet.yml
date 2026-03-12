@@ -33,6 +33,7 @@ jobs:
         else
           echo "Unsupported event ${{ github.event_name }}"
           exit 1
+        fi
         CHANGED=$(git diff --name-only $BEFORE_SHA $AFTER_SHA | cut -d'/' -f1 | sort | uniq)
         VALID_PROJECTS=()
         for proj in $CHANGED; do
