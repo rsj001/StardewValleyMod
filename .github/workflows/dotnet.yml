@@ -58,7 +58,7 @@ jobs:
 
             echo "Zipping $proj..."
             mkdir -p ./artifacts/$proj
-            zip -r ./artifacts/$proj/$proj.zip "$proj/bin/Release/net6.0"
+            mv "$proj/bin/Release/net6.0/*.zip" ./artifacts/
           else
             echo "Skipping $proj, no csproj found"
           fi
