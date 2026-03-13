@@ -16,10 +16,8 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: '6.0.x'
+    - name: Add build environment
+      uses: Pathoschild/SMAPI-ModBuildWorkflow/add-build-environment
 
     - name: Detect changed projects
       id: detect
@@ -40,6 +38,7 @@ jobs:
           if [ -f "$proj/$proj.csproj" ]; then
             VALID_PROJECTS+=($proj)
           fi
+          
         done
         echo "Changed projects: $VALID_PROJECTS"
         echo "changed_projects=$VALID_PROJECTS" >> $GITHUB_OUTPUT
