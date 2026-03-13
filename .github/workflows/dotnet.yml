@@ -45,8 +45,8 @@ jobs:
           fi
           
         done
-        echo "Changed projects: $VALID_PROJECTS"
-        echo "changed_projects=$VALID_PROJECTS" >> $GITHUB_OUTPUT
+        echo "Changed projects: ${VALID_PROJECTS[@]}"
+        echo "changed_projects=${VALID_PROJECTS[@]}" >> $GITHUB_OUTPUT
 
     - name: Build and zip changed projects
       run: |
