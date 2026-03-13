@@ -16,8 +16,13 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Add build environment
-      uses: Pathoschild/SMAPI-ModBuildWorkflow/add-build-environment
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: '6.0.x'
+
+    - name: Add reference assemblies
+      uses: Pathoschild/SMAPI-ModBuildWorkflow/add-reference-assemblies@v0
 
     - name: Detect changed projects
       id: detect
