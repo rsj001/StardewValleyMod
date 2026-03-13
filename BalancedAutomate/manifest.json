@@ -1,7 +1,7 @@
 {
   "Name": "Balanced Automate",
   "Author": "rsjww",
-  "Version": "0.3.5",
+  "Version": "0.3.6",
   "Description": "Machines don't stop just because you forgot to collect the last item. As long as materials are available, they'll keep working.",
   "UniqueID": "rsjww.BalancedAutomate",
   "EntryDll": "BalancedAutomate.dll",
