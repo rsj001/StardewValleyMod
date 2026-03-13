@@ -21,6 +21,9 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
+    - name: Add reference assemblies
+      uses: Pathoschild/SMAPI-ModBuildWorkflow/add-reference-assemblies@v0
+
     - name: Detect changed projects
       id: detect
       run: |
@@ -40,9 +43,10 @@ jobs:
           if [ -f "$proj/$proj.csproj" ]; then
             VALID_PROJECTS+=($proj)
           fi
+          
         done
-        echo "Changed projects: $VALID_PROJECTS"
-        echo "changed_projects=$VALID_PROJECTS" >> $GITHUB_OUTPUT
+        echo "Changed projects: ${VALID_PROJECTS[@]}"
+        echo "changed_projects=${VALID_PROJECTS[@]}" >> $GITHUB_OUTPUT
 
     - name: Build and zip changed projects
       run: |
@@ -53,8 +57,8 @@ jobs:
             dotnet build "$proj/$proj.csproj" --configuration Release --no-restore
 
             echo "Zipping $proj..."
-            mkdir -p ./artifacts/$proj
-            zip -r ./artifacts/$proj/$proj.zip "$proj/bin/Release/net6.0"
+            mkdir -p ./artifacts
+            mv "$proj/bin/Release/net6.0/"*.zip ./artifacts/
           else
             echo "Skipping $proj, no csproj found"
           fi
@@ -63,5 +67,5 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v6
       with:
-        name: Project-Mod-ZIP
+        name: Mod-release
         path: ./artifacts/**

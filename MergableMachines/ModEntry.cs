@@ -1,20 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
 using StardewValley;
-using StardewValley.Monsters;
-using StardewValley.Locations;
 using StardewValley.Extensions;
 using StardewValley.GameData.Machines;
+using StardewValley.GameData.WildTrees;
 using StardewValley.Inventories;
 using HarmonyLib;
 
@@ -23,12 +18,7 @@ using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
 using StardewValley.Objects;
-using StardewValley.Logging;
-using StardewValley.Network.NetEvents;
 using StardewValley.ItemTypeDefinitions;
-using StardewValley.BellsAndWhistles;
-using StardewValley.Delegates;
-using StardewValley.Internal;
 using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
 using Object = System.Object;
@@ -110,6 +100,10 @@ namespace MergableMachines
                 original: AccessTools.Method(typeof(SObject), nameof(SObject.PlaceInMachine)),
                 prefix: new HarmonyMethod(typeof(ModEntry), nameof(PlaceInMachine_Prefix)) { priority = HarmonyLib.Priority.Last }
             ); // This patches machine input, requires (xStack)
+            harmony.Patch(
+                original: AccessTools.Method(typeof(Tree), nameof(Tree.UpdateTapperProduct)),
+                postfix: new HarmonyMethod(typeof(ModEntry), nameof(UpdateTapperProduct_Postfix)) { priority = HarmonyLib.Priority.Last }
+            );
 
             if (Helper.ModRegistry.IsLoaded("Selph.ExtraMachineConfig"))
             { // Compatibility Patch
@@ -317,7 +311,6 @@ namespace MergableMachines
                             }
                             else if (config.forceStackMode == ForceStackMode.Always || (config.forceStackKeybind.IsDown() && config.forceStackMode == ForceStackMode.RequireKey))
                             {
-
                                 obj.heldObject.Value = null;
                                 obj.readyForHarvest.Value = false;
                                 obj.ResetParentSheetIndex();
@@ -372,7 +365,6 @@ namespace MergableMachines
                             if (obj.IsTapper() && location.terrainFeatures.TryGetValue(obj.tileLocation.Value, out var terrainFeature) && terrainFeature is Tree tree)
                             {
                                 tree.UpdateTapperProduct(obj);
-                                obj.heldObject.Value.Stack *= obj.Stack;
                             }
                         }
                         Game1.playSound("woodyStep");
@@ -400,13 +392,13 @@ namespace MergableMachines
                     Color RenderColor = Color.White * Transparency;
                     float draw_layer = Math.Max(0f, (float)((y + 1) * 64 - 24) / 10000f) + (float)x * 1E-05f;
                     float DrawLayerOffset = 1E-05f; // The SpriteBatch LayerDepth needs to be slightly larger than the layer depth used for the bigCraftable texture to avoid z-fighting
-                    
+
                     // For Tapper and Mushroom Log:
 
 
                     // end
-                    
-                    
+
+
                     Vector2 TopLeftTilePosition = Game1.GlobalToLocal(Game1.viewport, new Vector2(x * Game1.tileSize, y * Game1.tileSize));
                     Vector2 BottomRightTilePosition = Game1.GlobalToLocal(Game1.viewport, new Vector2((x + 1) * Game1.tileSize - 1, (y + 1) * Game1.tileSize - 1));
                     int digit_num = (int)Math.Log10(__instance.Stack) + 1;
@@ -448,6 +440,47 @@ namespace MergableMachines
                     __instance.heldObject.Value.Stack *= __instance.Stack;
                 // hie hie!
             }
+        }
+
+        public static void UpdateTapperProduct_Postfix(Tree __instance, SObject tapper, SObject previousOutput = null, bool onlyPerformRemovals = false)
+        {
+            if (tapper == null)
+            {
+                return;
+            }
+            WildTreeData data = __instance.GetData();
+            if (data == null)
+            {
+                return;
+            }
+            float timeMultiplier = 1f;
+            foreach (string contextTag in tapper.GetContextTags())
+            {
+                if (contextTag.StartsWithIgnoreCase("tapper_multiplier_") && float.TryParse(contextTag.Substring("tapper_multiplier_".Length), out var multiplier))
+                {
+                    timeMultiplier = 1f / multiplier;
+                    break;
+                }
+            }
+            Random random = Utility.CreateRandom(Game1.uniqueIDForThisGame, Game1.stats.DaysPlayed, 73137.0, (double)__instance.Tile.X * 9.0, (double)__instance.Tile.Y * 13.0);
+            var method = AccessTools.Method(typeof(Tree), "TryGetTapperOutput");
+            object[] args = new object[] {
+                data.TapItems,
+                previousOutput?.ItemId,
+                random,
+                timeMultiplier,
+                null, // output
+                0     // minutesUntilReady
+            };
+            var result = (bool)method.Invoke(__instance, args);
+            var output = (Item)args[4];
+            var minutesUntilReady = (int)args[5];
+            if (result && (!onlyPerformRemovals || output == null))
+            {
+                tapper.heldObject.Value.Stack *= tapper.Stack;
+                // This is it!
+            }
+
         }
 
         private void reloadGMCM()

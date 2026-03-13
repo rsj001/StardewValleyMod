@@ -140,36 +140,21 @@ namespace BalancedAutomate
 
             if (Helper.ModRegistry.IsLoaded("PeacefulEnd.AlternativeTextures"))
             { // Compatibility Patch
-                // monitor.Log("PeacefulEnd.AlternativeTextures detected, re-patching Object.draw", LogLevel.Info);
-                // var type = AccessTools.TypeByName("AlternativeTextures.Framework.Patches.StandardObjects.ObjectPatch");
-                // var method = AccessTools.Method(type, "DrawPrefix");
-                // harmony.Patch(
-                //     method,
-                //     postfix: new HarmonyMethod(
-                //         typeof(ModEntry),
-                //         nameof(AT_draw_Prefix)
-                //     )
-                // );
                 monitor.Log("PeacefulEnd.AlternativeTextures detected, re-patching Object.draw", LogLevel.Info);
                 var type = AccessTools.TypeByName("AlternativeTextures.Framework.Patches.StandardObjects.ObjectPatch");
                 harmony.Patch(
                     original: AccessTools.Method(type, "DrawPrefix"),
-                    transpiler: new HarmonyMethod(typeof(ModEntry), nameof(draw_Transpiler)) { priority = HarmonyLib.Priority.First }
+                    transpiler: new HarmonyMethod(typeof(ModEntry), nameof(draw_Transpiler_AT)) { priority = HarmonyLib.Priority.First }
                 ); // This adds drawing of ModData, also handles the logic of Auto-Stacking
-
             }
-            else
-            {
-                // harmony.Patch(
-                //     original: AccessTools.Method(typeof(SObject), nameof(SObject.draw), new Type[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) }),
-                //     prefix: new HarmonyMethod(typeof(ModEntry), nameof(draw_Prefix)) { priority = HarmonyLib.Priority.Last }
-                // ); // This adds drawing of ModData, also handles the logic of Auto-Stacking
-                harmony.Patch(
-                    original: AccessTools.Method(typeof(SObject), nameof(SObject.draw), new Type[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) }),
-                    transpiler: new HarmonyMethod(typeof(ModEntry), nameof(draw_Transpiler)) { priority = HarmonyLib.Priority.First }
-                ); // This adds drawing of ModData, also handles the logic of Auto-Stacking
-
-            }
+            // harmony.Patch(
+            //     original: AccessTools.Method(typeof(SObject), nameof(SObject.draw), new Type[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) }),
+            //     prefix: new HarmonyMethod(typeof(ModEntry), nameof(draw_Prefix)) { priority = HarmonyLib.Priority.Last }
+            // ); // This adds drawing of ModData, also handles the logic of Auto-Stacking
+            harmony.Patch(
+                original: AccessTools.Method(typeof(SObject), nameof(SObject.draw), new Type[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) }),
+                transpiler: new HarmonyMethod(typeof(ModEntry), nameof(draw_Transpiler)) { priority = HarmonyLib.Priority.First }
+            ); // This adds drawing of ModData, also handles the logic of Auto-Stacking
             harmony.Patch(
                 original: AccessTools.Method(typeof(SObject), nameof(SObject.draw), new Type[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) }),
                 postfix: new HarmonyMethod(typeof(ModEntry), nameof(draw_Postfix)) { priority = HarmonyLib.Priority.First }
@@ -911,7 +896,27 @@ namespace BalancedAutomate
                     codes[i + 1].opcode == OpCodes.Ldfld &&
                     codes[i + 1].operand is System.Reflection.FieldInfo fi && fi.Name == "readyForHarvest")
                 {
-                    codes[i] = new CodeInstruction(OpCodes.Ret);
+                    codes[i].opcode = OpCodes.Ret;
+                    return codes;
+                }
+            }
+            monitor.Log("Failed to patch with Transpiler. Visual error may occur.", LogLevel.Error);
+            return codes;
+        }
+
+        static IEnumerable<CodeInstruction> draw_Transpiler_AT(IEnumerable<CodeInstruction> instructions)
+        {
+            var codes = new List<CodeInstruction>(instructions);
+            for (int i = 0; i + 1 < codes.Count; i++)
+            {
+                if (codes[i].opcode == OpCodes.Ldarg_0 &&
+                    codes[i + 1].opcode == OpCodes.Ldfld &&
+                    codes[i + 1].operand is System.Reflection.FieldInfo fi && fi.Name == "readyForHarvest")
+                {
+                    codes[i].opcode = OpCodes.Ldc_I4_0;
+                    codes[i].operand = null;
+                    codes[i + 1].opcode = OpCodes.Ret;
+                    codes[i + 1].operand = null;
                     return codes;
                 }
             }
