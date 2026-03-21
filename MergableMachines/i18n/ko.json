@@ -1,0 +1,32 @@
+{
+  "gmcm.general": "일반",
+  "tree_tired": "나무가 조금 힘들어 보입니다.",
+  "hit_max_stack": "기계는 최대 {0}개까지만 병합할 수 있습니다.",
+  "machine_occupied": "이 기계는 지금 사용 중입니다.",
+  "gmcm.max_stack": "최대 병합 개수",
+  "gmcm.max_stack.tooltip": "한 묶음으로 병합할 수 있는 기계의 최대 개수입니다. 1로 설정하면 병합이 비활성화됩니다.",
+  "gmcm.opacity": "병합 숫자 불투명도",
+  "gmcm.opacity.tooltip": "병합 개수 숫자의 불투명도를 설정합니다. 0으로 설정하면 숨겨집니다.",
+
+  "gmcm.force_stack": "강제 병합",
+  "gmcm.force_stack_mode": "강제 병합 모드",
+  "gmcm.force_stack_mode.tooltip": "비활성화 — 강제 병합을 사용하지 않습니다.\n단축키 필요 — 단축키를 누르고 있을 때만 강제 병합을 사용합니다.\n항상 — 강제 병합이 항상 활성화됩니다. 신중하게 선택하세요.",
+  "gmcm.disable": "비활성화",
+  "gmcm.require_key": "단축키 필요 (아래에서 설정)",
+  "gmcm.always": "항상",
+  
+  "gmcm.force_stack_keybind": "강제 병합 단축키",
+  "gmcm.force_stack_keybind.tooltip": "강제 병합에 사용할 키입니다. 기본값: Q.",
+  "gmcm.stack_tappers": "수액 채취기 병합허용",
+  "gmcm.stack_tappers.tooltip": "하나의 나무에 여러 개의 수액 채취기를 설치할 수 있습니다. 나무가 꽤 힘들어할 수도 있습니다.",
+
+  "gmcm.quickstack": "빠른 병합",
+  "gmcm.quickstack999_keybind": "빠른 병합 999 단축키",
+  "gmcm.quickstack999_keybind.tooltip": "기계에 아이템 999개를 즉시 병합할 때 사용할 단축키입니다.",
+  "gmcm.quickstack25_keybind": "빠른 병합 25 단축키",
+  "gmcm.quickstack25_keybind.tooltip": "기계에 아이템 25개를 즉시 병합할 때 사용할 단축키입니다.",
+  "gmcm.quickstack5_keybind": "빠른 병합 5 단축키",
+  "gmcm.quickstack5_keybind.tooltip": "기계에 아이템 5개를 즉시 병합할 때 사용할 단축키입니다.",
+
+  "gmcm.machine": "기계 병합 활성화 대상"
+}
