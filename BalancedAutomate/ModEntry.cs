@@ -110,7 +110,7 @@ namespace BalancedAutomate
         static Harmony harmony = null!;
         static ModConfig config = new ModConfig();
         static IModHelper helper = null!;
-        static IMonitor monitor = null!;
+        static public IMonitor monitor = null!;
         public static string ModID = null!;
         static HashSet<string> whiteList = new HashSet<string>();
 
@@ -141,11 +141,7 @@ namespace BalancedAutomate
             if (Helper.ModRegistry.IsLoaded("PeacefulEnd.AlternativeTextures"))
             { // Compatibility Patch
                 monitor.Log("PeacefulEnd.AlternativeTextures detected, re-patching Object.draw", LogLevel.Info);
-                var type = AccessTools.TypeByName("AlternativeTextures.Framework.Patches.StandardObjects.ObjectPatch");
-                harmony.Patch(
-                    original: AccessTools.Method(type, "DrawPrefix"),
-                    transpiler: new HarmonyMethod(typeof(ModEntry), nameof(draw_Transpiler_AT)) { priority = HarmonyLib.Priority.First }
-                ); // This adds drawing of ModData, also handles the logic of Auto-Stacking
+                AlternativeTexturesPatch.Apply(harmony);
             }
             // harmony.Patch(
             //     original: AccessTools.Method(typeof(SObject), nameof(SObject.draw), new Type[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) }),
@@ -897,26 +893,6 @@ namespace BalancedAutomate
                     codes[i + 1].operand is System.Reflection.FieldInfo fi && fi.Name == "readyForHarvest")
                 {
                     codes[i].opcode = OpCodes.Ret;
-                    return codes;
-                }
-            }
-            monitor.Log("Failed to patch with Transpiler. Visual error may occur.", LogLevel.Error);
-            return codes;
-        }
-
-        static IEnumerable<CodeInstruction> draw_Transpiler_AT(IEnumerable<CodeInstruction> instructions)
-        {
-            var codes = new List<CodeInstruction>(instructions);
-            for (int i = 0; i + 1 < codes.Count; i++)
-            {
-                if (codes[i].opcode == OpCodes.Ldarg_0 &&
-                    codes[i + 1].opcode == OpCodes.Ldfld &&
-                    codes[i + 1].operand is System.Reflection.FieldInfo fi && fi.Name == "readyForHarvest")
-                {
-                    codes[i].opcode = OpCodes.Ldc_I4_0;
-                    codes[i].operand = null;
-                    codes[i + 1].opcode = OpCodes.Ret;
-                    codes[i + 1].operand = null;
                     return codes;
                 }
             }

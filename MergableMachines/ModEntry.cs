@@ -69,7 +69,7 @@ namespace MergableMachines
         private static ModConfig config = new ModConfig();
         private static HashSet<string> whiteList = new HashSet<string>();
         static IModHelper helper = null!;
-        static IMonitor monitor = null!;
+        public static IMonitor monitor = null!;
         public override void Entry(IModHelper init_helper)
         {
             helper = init_helper;
@@ -108,45 +108,20 @@ namespace MergableMachines
             if (Helper.ModRegistry.IsLoaded("Selph.ExtraMachineConfig"))
             { // Compatibility Patch
                 monitor.Log("Selph.ExtraMachineConfig detected, patching GetFuelsForThisRecipe", LogLevel.Info);
-                var type = AccessTools.TypeByName("Selph.StardewMods.ExtraMachineConfig.Utils");
-                var method = AccessTools.Method(type, "GetFuelsForThisRecipe");
-                harmony.Patch(
-                    method,
-                    postfix: new HarmonyMethod(
-                        typeof(ModEntry),
-                        nameof(GetFuelsForThisRecipe_Postfix)
-                    )
-                );
+                ExtraMachineConfigPatch.Apply(harmony);
+            }
+            
+            if (Helper.ModRegistry.IsLoaded("NermNermNerm.Junimatic"))
+            {
+                monitor.Log("NermNermNerm.Junimatic detected, patching GetRecipeFromChest", LogLevel.Info);
+                JunimaticPatch.Patch(harmony);
             }
             helper.Events.GameLoop.UpdateTicked += onUpdateTicked;
             helper.Events.Content.AssetReady += onAssetReady;
             helper.Events.GameLoop.GameLaunched += (s, e) => reloadGMCM();
         }
-        static int stack_patch = 1;
-        public static void GetFuelsForThisRecipe_Postfix(ref object __result, MachineItemOutput outputData, Item inputItem, IInventory inventory)
-        {
-            if (__result != null)
-            {
-                System.Collections.IList res_list = (System.Collections.IList)__result;
-
-                for (int idx = 0; idx < res_list.Count; idx++)
-                {
-                    object tuple = res_list[idx];
-
-                    var itemProp = tuple.GetType().GetField("Item1");
-                    var fuelProp = tuple.GetType().GetField("Item2");
-                    var item = (Item)itemProp.GetValue(tuple);
-
-                    var fuel = fuelProp.GetValue(tuple);
-                    var countField = fuel.GetType().GetField("count");
-                    int old = (int)countField.GetValue(fuel);
-                    countField.SetValue(fuel, old * stack_patch);
-
-                    var newTuple = Activator.CreateInstance(tuple.GetType(), item, fuel);
-                    res_list[idx] = newTuple;
-                }
-            }
-        }
+        static public int stack_patch = 1;
+        
         public static bool PlaceInMachine_Prefix(SObject __instance, ref bool __result, MachineData machineData, Item inputItem, bool probe, Farmer who, bool showMessages = true, bool playSounds = true)
         {
             __result = _PlaceInMachine(__instance, machineData, inputItem, probe, who, showMessages, playSounds);
