@@ -28,9 +28,9 @@ namespace MergableMachines
 {
     public enum ForceStackMode
     {
-        Disabled,    // 禁用
-        RequireKey,  // 需要按键确认
-        Always         // 自动堆叠
+        Disabled,
+        RequireKey,
+        Always
     }
     public sealed class ModConfig
     {
@@ -268,6 +268,7 @@ namespace MergableMachines
             if (!Game1.player.UsingTool && (!Game1.eventUp || (Game1.currentLocation.currentEvent != null && Game1.currentLocation.currentEvent.playerControlSequence)) && !Game1.fadeToBlack)
             {
                 if (!whiteList.Contains(Game1.player.ActiveObject.QualifiedItemId)) return true;
+                // only check white list when stacking, check moddata when drawing
                 // machine stack only!
                 SObject item = Game1.player.ActiveObject;
                 Vector2 cursorTile = new Vector2(Game1.getOldMouseX() + Game1.viewport.X, Game1.getOldMouseY() + Game1.viewport.Y) / 64f;
@@ -319,6 +320,7 @@ namespace MergableMachines
                             return true;
                         }
                         obj.Stack += amount;
+                        obj.modData["rsjww.MergableMachines.MyMachine"] = "1";
                         if (item.Stack != amount)
                         {
                             item.Stack -= amount;
@@ -360,6 +362,7 @@ namespace MergableMachines
                     // Not placed yet
                     return;
                 }
+                if (!__instance.modData.TryGetValue("rsjww.MergableMachines.MyMachine", out var s) || s != "1") return;
                 // Credits: Combine Machine
                 float Transparency = alpha * config.NumberOpacity;
                 if (Transparency > 0f)
@@ -393,6 +396,7 @@ namespace MergableMachines
         {
             if (__instance.Stack > 1)
             {
+                if (!__instance.modData.TryGetValue("rsjww.MergableMachines.MyMachine", out var s) || s != "1") return true;
                 SObject CombinedRefund = (SObject)ItemRegistry.Create(__instance.QualifiedItemId, __instance.Stack - 1);
                 Game1.createMultipleItemDebris(CombinedRefund, __instance.TileLocation * 64f, (Game1.player.FacingDirection + 2) % 4);
             }
