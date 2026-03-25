@@ -67,7 +67,7 @@ namespace MergableMachines
     {
         static Harmony harmony = null!;
         private static ModConfig config = new ModConfig();
-        private static HashSet<string> whiteList = new HashSet<string>();
+        public static HashSet<string> whiteList = new HashSet<string>();
         static IModHelper helper = null!;
         public static IMonitor monitor = null!;
         public override void Entry(IModHelper init_helper)
@@ -110,7 +110,7 @@ namespace MergableMachines
                 monitor.Log("Selph.ExtraMachineConfig detected, patching GetFuelsForThisRecipe", LogLevel.Info);
                 ExtraMachineConfigPatch.Apply(harmony);
             }
-            
+
             if (Helper.ModRegistry.IsLoaded("NermNermNerm.Junimatic"))
             {
                 monitor.Log("NermNermNerm.Junimatic detected, patching GetRecipeFromChest", LogLevel.Info);
@@ -119,9 +119,18 @@ namespace MergableMachines
             helper.Events.GameLoop.UpdateTicked += onUpdateTicked;
             helper.Events.Content.AssetReady += onAssetReady;
             helper.Events.GameLoop.GameLaunched += (s, e) => reloadGMCM();
+            helper.Events.GameLoop.SaveLoaded += onSaveLoaded;
         }
+
+        void onSaveLoaded(object? sender, SaveLoadedEventArgs e)
+        {
+            if (!Context.IsMainPlayer) return;
+            LegacyMigration.checkAll();
+        }
+
+
         static public int stack_patch = 1;
-        
+
         public static bool PlaceInMachine_Prefix(SObject __instance, ref bool __result, MachineData machineData, Item inputItem, bool probe, Farmer who, bool showMessages = true, bool playSounds = true)
         {
             __result = _PlaceInMachine(__instance, machineData, inputItem, probe, who, showMessages, playSounds);
@@ -362,6 +371,7 @@ namespace MergableMachines
                     // Not placed yet
                     return;
                 }
+                // LegacyMigration.checkOne(__instance);
                 if (!__instance.modData.TryGetValue("rsjww.MergableMachines.MyMachine", out var s) || s != "1") return;
                 // Credits: Combine Machine
                 float Transparency = alpha * config.NumberOpacity;
@@ -396,6 +406,7 @@ namespace MergableMachines
         {
             if (__instance.Stack > 1)
             {
+                // LegacyMigration.checkOne(__instance);
                 if (!__instance.modData.TryGetValue("rsjww.MergableMachines.MyMachine", out var s) || s != "1") return true;
                 SObject CombinedRefund = (SObject)ItemRegistry.Create(__instance.QualifiedItemId, __instance.Stack - 1);
                 Game1.createMultipleItemDebris(CombinedRefund, __instance.TileLocation * 64f, (Game1.player.FacingDirection + 2) % 4);
