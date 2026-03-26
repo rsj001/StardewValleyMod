@@ -467,7 +467,8 @@ namespace MergableMachines
             var minutesUntilReady = (int)args[5];
             if (result && (!onlyPerformRemovals || output == null))
             {
-                tapper.heldObject.Value.Stack *= tapper.Stack;
+                if (tapper.heldObject.Value != null)
+                    tapper.heldObject.Value.Stack *= tapper.Stack;
                 // This is it!
             }
 
