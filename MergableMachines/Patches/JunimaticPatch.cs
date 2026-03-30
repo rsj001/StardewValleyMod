@@ -27,8 +27,10 @@ class JunimaticPatch
         if (prop?.GetValue(__instance) is not SObject Machine) return;
         var MachineStack = Machine.Stack;
         if (MachineStack <= 1) return;
+        if (__result == null) return;
         foreach (var item in __result)
         {
+            if (item == null) continue;
             item.Stack = item.Stack * MachineStack;
         }
     }
