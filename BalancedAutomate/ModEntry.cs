@@ -1,40 +1,23 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Reflection.Emit;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
-using StardewValley.Monsters;
-using StardewValley.Locations;
-using StardewValley.Extensions;
 using StardewValley.GameData.Machines;
 using StardewValley.Inventories;
 using HarmonyLib;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
 using StardewValley.Objects;
 using StardewValley.Logging;
-using StardewValley.Network.NetEvents;
 using StardewValley.ItemTypeDefinitions;
-using StardewValley.BellsAndWhistles;
 using StardewValley.Delegates;
 using StardewValley.Internal;
 using StardewValley.TerrainFeatures;
-
-using Microsoft.Xna.Framework.Input;
-
 using SObject = StardewValley.Object;
 using Object = System.Object;
-using StardewValley.TokenizableStrings;
-using System.Xml.Serialization;
-using System.Security.AccessControl;
 
 namespace BalancedAutomate
 {
@@ -143,10 +126,11 @@ namespace BalancedAutomate
                 monitor.Log("PeacefulEnd.AlternativeTextures detected, re-patching Object.draw", LogLevel.Info);
                 AlternativeTexturesPatch.Apply(harmony);
             }
-            // harmony.Patch(
-            //     original: AccessTools.Method(typeof(SObject), nameof(SObject.draw), new Type[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) }),
-            //     prefix: new HarmonyMethod(typeof(ModEntry), nameof(draw_Prefix)) { priority = HarmonyLib.Priority.Last }
-            // ); // This adds drawing of ModData, also handles the logic of Auto-Stacking
+            if (Helper.ModRegistry.IsLoaded("DaLion.Core"))
+            { // Compatibility Patch
+                monitor.Log("DaLion.Core detected, blocking ObjectMinutesElapsedPatcher", LogLevel.Info);
+                DaLionheartPatch.Apply(harmony);
+            }
             harmony.Patch(
                 original: AccessTools.Method(typeof(SObject), nameof(SObject.draw), new Type[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) }),
                 transpiler: new HarmonyMethod(typeof(ModEntry), nameof(draw_Transpiler)) { priority = HarmonyLib.Priority.First }
@@ -653,198 +637,6 @@ namespace BalancedAutomate
             }
             return false;
         }
-
-        /*
-                public static bool draw_Prefix(SObject __instance, SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
-                {
-                    _draw(__instance, spriteBatch, x, y, alpha);
-                    return false;
-                }
-                public static void _draw(SObject __instance, SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
-                {
-                    if (__instance.isTemporarilyInvisible)
-                    {
-                        return;
-                    }
-                    var showNextIndex = __instance.showNextIndex;
-                    var heldObject = __instance.heldObject;
-                    var shakeTimer = __instance.shakeTimer;
-                    var scale = __instance.scale;
-                    var flipped = __instance.flipped;
-                    var quality = __instance.quality;
-                    var tileLocation = __instance.tileLocation;
-                    var TileLocation = __instance.TileLocation;
-                    var readyForHarvest = __instance.readyForHarvest;
-                    var fragility = __instance.fragility;
-                    var isLamp = __instance.isLamp;
-                    Vector2 getScale() => __instance.getScale();
-                    MachineData GetMachineData() => __instance.GetMachineData();
-                    var bigCraftable = __instance.bigCraftable;
-                    var MinutesUntilReady = __instance.MinutesUntilReady;
-                    var preservedParentSheetIndex = __instance.preservedParentSheetIndex;
-                    // ref/value handling here is a bit messy. what's the way to do this?
-                    Vector2 getLocalPosition(xTile.Dimensions.Rectangle viewport) => __instance.getLocalPosition(viewport);
-                    Rectangle GetBoundingBoxAt(int x, int y) => __instance.GetBoundingBoxAt(x, y);
-                    GameLocation Location = __instance.Location;
-                    bool isPassable() => __instance.isPassable();
-                    bool IsSprinkler() => __instance.IsSprinkler();
-                    bool IsTapper() => __instance.IsTapper();
-
-                    var _machineAnimation = AccessTools.Field(typeof(SObject), "_machineAnimation").GetValue(__instance);
-                    var _machineAnimationFrame = (int)AccessTools.Field(typeof(SObject), "_machineAnimationFrame").GetValue(__instance);
-
-                    if (__instance.hovering)
-                    {
-                        if (__instance.IsTextSign() && !string.IsNullOrEmpty(__instance.SignText))
-                        {
-                            Vector2 position = Game1.GlobalToLocal(Game1.viewport, new Vector2(x * 64 + 32, y * 64 - 64));
-                            SpriteText.drawSmallTextBubble(spriteBatch, __instance.SignText, position, 256, 0.98f + TileLocation.X * 0.0001f + TileLocation.Y * 1E-06f);
-                        }
-                        __instance.hovering = false;
-                    }
-                    if (bigCraftable.Value)
-                    {
-                        Vector2 scaleFactor = getScale();
-                        scaleFactor *= 4f;
-                        Vector2 position2 = Game1.GlobalToLocal(Game1.viewport, new Vector2(x * 64, y * 64 - 64));
-                        Rectangle destination = new Rectangle((int)(position2.X - scaleFactor.X / 2f) + ((shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0), (int)(position2.Y - scaleFactor.Y / 2f) + ((shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0), (int)(64f + scaleFactor.X), (int)(128f + scaleFactor.Y / 2f));
-                        float draw_layer = Math.Max(0f, (float)((y + 1) * 64 - 24) / 10000f) + (float)x * 1E-05f;
-                        int offset = 0;
-                        if (showNextIndex.Value)
-                        {
-                            offset = 1;
-                        }
-                        ParsedItemData itemData = ItemRegistry.GetDataOrErrorItem(__instance.QualifiedItemId);
-                        if (heldObject.Value != null)
-                        {
-                            MachineData machineData = GetMachineData();
-                            if (machineData != null && machineData.IsIncubator)
-                            {
-                                offset = FarmAnimal.GetAnimalDataFromEgg(heldObject.Value, Location)?.IncubatorParentSheetOffset ?? 1;
-                            }
-                        }
-                        if ((int)_machineAnimationFrame >= 0 && _machineAnimation != null)
-                        {
-                            offset = (int)_machineAnimationFrame;
-                        }
-                        if (__instance is Mannequin mannequin)
-                        {
-                            offset = mannequin.facing.Value;
-                        }
-                        if (IsTapper())
-                        {
-                            draw_layer = Math.Max(0f, (float)((y + 1) * 64 + 2) / 10000f) + (float)x / 1000000f;
-                        }
-                        if (__instance.QualifiedItemId == "(BC)272")
-                        {
-                            Texture2D texture = itemData.GetTexture();
-                            spriteBatch.Draw(texture, destination, itemData.GetSourceRect(1, __instance.ParentSheetIndex), Color.White * alpha, 0f, Vector2.Zero, SpriteEffects.None, draw_layer);
-                            spriteBatch.Draw(texture, position2 + new Vector2(8.5f, 12f) * 4f, itemData.GetSourceRect(2, __instance.ParentSheetIndex), Color.White * alpha, (float)Game1.currentGameTime.TotalGameTime.TotalSeconds * -1.5f, new Vector2(7.5f, 15.5f), 4f, SpriteEffects.None, draw_layer + 1E-05f);
-                            return;
-                        }
-                        spriteBatch.Draw(itemData.GetTexture(), destination, itemData.GetSourceRect(offset, __instance.ParentSheetIndex), Color.White * alpha, 0f, Vector2.Zero, SpriteEffects.None, draw_layer);
-                        if (__instance.QualifiedItemId == "(BC)17" && MinutesUntilReady > 0)
-                        {
-                            spriteBatch.Draw(Game1.objectSpriteSheet, getLocalPosition(Game1.viewport) + new Vector2(32f, 0f), Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, 435, 16, 16), Color.White * alpha, scale.X, new Vector2(8f, 8f), 4f, SpriteEffects.None, Math.Max(0f, (float)((y + 1) * 64) / 10000f + 0.0001f + (float)x * 1E-05f));
-                        }
-                        if (isLamp.Value && Game1.isDarkOut(Location))
-                        {
-                            spriteBatch.Draw(Game1.mouseCursors, position2 + new Vector2(-32f, -32f), new Rectangle(88, 1779, 32, 32), Color.White * 0.75f, 0f, Vector2.Zero, 4f, SpriteEffects.None, Math.Max(0f, (float)((y + 1) * 64 - 20) / 10000f) + (float)x / 1000000f);
-                        }
-                        if (__instance.QualifiedItemId == "(BC)126")
-                        {
-                            string hatId = ((quality.Value != 0) ? (quality.Value - 1).ToString() : preservedParentSheetIndex.Value);
-                            if (hatId != null)
-                            {
-                                ParsedItemData dataOrErrorItem = ItemRegistry.GetDataOrErrorItem("(H)" + hatId);
-                                Texture2D texture2 = dataOrErrorItem.GetTexture();
-                                int spriteIndex = dataOrErrorItem.SpriteIndex;
-                                bool isPrismatic = ItemContextTagManager.HasBaseTag("(H)" + hatId, "Prismatic");
-                                spriteBatch.Draw(texture2, position2 + new Vector2(-3f, -6f) * 4f, new Rectangle(spriteIndex * 20 % texture2.Width, spriteIndex * 20 / texture2.Width * 20 * 4, 20, 20), (isPrismatic ? Utility.GetPrismaticColor() : Color.White) * alpha, 0f, Vector2.Zero, 4f, SpriteEffects.None, Math.Max(0f, (float)((y + 1) * 64 - 20) / 10000f) + (float)x * 1E-05f);
-                            }
-                        }
-                    }
-                    else if (!Game1.eventUp || (Game1.CurrentEvent != null && !Game1.CurrentEvent.isTileWalkedOn(x, y)))
-                    {
-                        Rectangle bounds = GetBoundingBoxAt(x, y);
-                        string qualifiedItemId = __instance.QualifiedItemId;
-                        if (qualifiedItemId == "(O)590")
-                        {
-                            spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2(x * 64 + 32 + ((shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0), y * 64 + 32 + ((shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0))), new Rectangle(368 + ((Game1.currentGameTime.TotalGameTime.TotalMilliseconds % 1200.0 <= 400.0) ? ((int)(Game1.currentGameTime.TotalGameTime.TotalMilliseconds % 400.0 / 100.0) * 16) : 0), 32, 16, 16), Color.White * alpha, 0f, new Vector2(8f, 8f), (scale.Y > 1f) ? getScale().Y : 4f, flipped.Value ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (float)(isPassable() ? bounds.Top : bounds.Bottom) / 10000f);
-                            return;
-                        }
-                        if (qualifiedItemId == "(O)SeedSpot")
-                        {
-                            spriteBatch.Draw(Game1.mouseCursors_1_6, Game1.GlobalToLocal(Game1.viewport, new Vector2(x * 64 + 32 + ((shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0), y * 64 + 32 + ((shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0))), new Rectangle(160 + ((Game1.currentGameTime.TotalGameTime.TotalMilliseconds % 1600.0 <= 800.0) ? ((int)(Game1.currentGameTime.TotalGameTime.TotalMilliseconds % 400.0 / 100.0) * 16) : 0), 0, 17, 16), Color.White * alpha, 0f, new Vector2(8f, 8f), (scale.Y > 1f) ? getScale().Y : 4f, (Game1.currentGameTime.TotalGameTime.TotalMilliseconds % 1600.0 <= 400.0) ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (float)(isPassable() ? bounds.Top : bounds.Bottom) / 10000f);
-                            return;
-                        }
-                        if (fragility.Value != 2)
-                        {
-                            spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2(x * 64 + 32, y * 64 + 51 + 4)), Game1.shadowTexture.Bounds, Color.White * alpha, 0f, new Vector2(Game1.shadowTexture.Bounds.Center.X, Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)bounds.Bottom / 15000f);
-                        }
-                        ParsedItemData itemData2 = ItemRegistry.GetDataOrErrorItem(__instance.QualifiedItemId);
-                        spriteBatch.Draw(itemData2.GetTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2(x * 64 + 32 + ((shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0), y * 64 + 32 + ((shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0))), itemData2.GetSourceRect(), Color.White * alpha, 0f, new Vector2(8f, 8f), (scale.Y > 1f) ? getScale().Y : 4f, flipped.Value ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (float)(isPassable() ? bounds.Top : bounds.Center.Y) / 10000f);
-                        if (IsSprinkler())
-                        {
-                            if (heldObject.Value != null)
-                            {
-                                Vector2 offset2 = Vector2.Zero;
-                                if (heldObject.Value.QualifiedItemId == "(O)913")
-                                {
-                                    offset2 = new Vector2(0f, -20f);
-                                }
-                                ParsedItemData heldItemData = ItemRegistry.GetDataOrErrorItem(heldObject.Value.QualifiedItemId);
-                                spriteBatch.Draw(heldItemData.GetTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2(x * 64 + 32 + ((shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0), y * 64 + 32 + ((shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0)) + offset2), heldItemData.GetSourceRect(1), Color.White * alpha, 0f, new Vector2(8f, 8f), (scale.Y > 1f) ? getScale().Y : 4f, flipped.Value ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (float)(isPassable() ? bounds.Top : bounds.Bottom) / 10000f + 1E-05f);
-                            }
-                            if (__instance.SpecialVariable == 999999)
-                            {
-                                if (heldObject.Value != null && heldObject.Value.QualifiedItemId == "(O)913")
-                                {
-                                    Torch.drawBasicTorch(spriteBatch, (float)(x * 64) - 2f, y * 64 - 32, (float)bounds.Bottom / 10000f + 1E-06f);
-                                }
-                                else
-                                {
-                                    Torch.drawBasicTorch(spriteBatch, (float)(x * 64) - 2f, y * 64 - 32 + 12, (float)(bounds.Bottom + 2) / 10000f);
-                                }
-                            }
-                        }
-                    }
-                    SObject HarvestObject;
-                    if (GetFirstOrNull(__instance) is SObject outputFromBuffer)
-                    {
-                        HarvestObject = outputFromBuffer;
-                    }
-                    else
-                    {
-                        if (heldObject.Value != null && readyForHarvest.Value) HarvestObject = heldObject.Value;
-                        else return;
-                    }
-                    float base_sort = (float)((y + 1) * 64) / 10000f + tileLocation.X / 50000f;
-                    if (IsTapper() || __instance.QualifiedItemId.Equals("(BC)MushroomLog"))
-                    {
-                        base_sort += 0.02f;
-                    }
-                    float yOffset = 4f * (float)Math.Round(Math.Sin(Game1.currentGameTime.TotalGameTime.TotalMilliseconds / 250.0), 2);
-                    spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2(x * 64 - 8, (float)(y * 64 - 96 - 16) + yOffset)), new Rectangle(141, 465, 20, 24), Color.White * 0.75f, 0f, Vector2.Zero, 4f, SpriteEffects.None, base_sort + 1E-06f);
-
-                    ParsedItemData heldItemData2 = ItemRegistry.GetDataOrErrorItem(HarvestObject.QualifiedItemId);
-                    Texture2D texture3 = heldItemData2.GetTexture();
-                    if (HarvestObject is ColoredObject coloredObj)
-                    {
-                        coloredObj.drawInMenu(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2(x * 64, (float)(y * 64) - 96f - 8f + yOffset)), 1f, 0.75f, base_sort + 1.1E-05f);
-                        return;
-                    }
-                    spriteBatch.Draw(texture3, Game1.GlobalToLocal(Game1.viewport, new Vector2(x * 64 + 32, (float)(y * 64 - 64 - 8) + yOffset)), heldItemData2.GetSourceRect(), Color.White * 0.75f, 0f, new Vector2(8f, 8f), 4f, SpriteEffects.None, base_sort + 1E-05f);
-                    if (HarvestObject.Stack > 1)
-                    {
-                        HarvestObject.DrawMenuIcons(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2(x * 64, (float)(y * 64 - 64 - 32) + yOffset - 4f)), 1f, 1f, base_sort + 1.2E-05f, StackDrawType.Draw, Color.White);
-                    }
-                    else if (HarvestObject.Quality > 0)
-                    {
-                        HarvestObject.DrawMenuIcons(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2(x * 64, (float)(y * 64 - 64 - 32) + yOffset - 4f)), 1f, 1f, base_sort + 1.2E-05f, StackDrawType.HideButShowQuality, Color.White);
-                    }
-                }
-        */
         public static void draw_Postfix(SObject __instance, SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
             var heldObject = __instance.heldObject;
