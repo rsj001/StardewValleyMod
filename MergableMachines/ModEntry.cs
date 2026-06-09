@@ -37,6 +37,7 @@ namespace MergableMachines
 
         public int gmcmInterval { get; set; } = 60;
         public int maxStack { get; set; } = 99;
+        public int oneClickStack { get; set; } = 1;
         public float NumberOpacity { get; set; } = 0.9f;
         public ForceStackMode forceStackMode { get; set; } = ForceStackMode.RequireKey;
         public bool stackTappers { get; set; } = false;
@@ -308,7 +309,7 @@ namespace MergableMachines
                             }
                         }
 
-                        int amount = 1;
+                        int amount = config.oneClickStack;
                         if (config.quickStack999Keybind.IsDown())
                         {
                             amount = 999;
@@ -497,6 +498,16 @@ namespace MergableMachines
                 tooltip: () => G("gmcm.max_stack.tooltip"),
                 getValue: () => config.maxStack,
                 setValue: (int val) => config.maxStack = val,
+                min: 1,
+                max: 999,
+                interval: 1
+            );
+            configMenu.AddNumberOption(
+                mod: this.ModManifest,
+                name: () => G("gmcm.one_click_stack"),
+                tooltip: () => G("gmcm.one_click_stack.tooltip"),
+                getValue: () => config.oneClickStack,
+                setValue: (int val) => config.oneClickStack = val,
                 min: 1,
                 max: 999,
                 interval: 1

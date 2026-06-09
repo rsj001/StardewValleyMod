@@ -5,6 +5,10 @@
     "machine_occupied": "Cette machine est occupée pour le moment.",
     "gmcm.max_stack": "Taille maximale de fusion",
     "gmcm.max_stack.tooltip": "Nombre maximal de machines dans une même pile. Réglez sur 1 pour désactiver la fusion.",
+
+    "gmcm.one_click_stack": "Empilement à un clic",
+    "gmcm.one_click_stack.tooltip": "Nombre de machines à empiler en un seul clic.",
+
     "gmcm.opacity": "Opacité du nombre de pile",
     "gmcm.opacity.tooltip": "Opacité du nombre indiquant la taille de la pile. Réglez sur 0 pour le masquer.",
  
