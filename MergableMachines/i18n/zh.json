@@ -6,8 +6,20 @@
     "gmcm.max_stack": "最大合并数量",
     "gmcm.max_stack.tooltip": "一组最多可以合并多少台机器。设为 1 可禁用合并。",
 
-    "gmcm.one_click_stack": "单击堆叠数量",
-    "gmcm.one_click_stack.tooltip": "单击一次堆叠的机器数量",
+    "gmcm.one_click_stack_100x": "一键堆叠（100x）",
+    "gmcm.one_click_stack_100x.tooltip": "单次点击时增加的机器数量（100x档位）。该值会与1x和10x档位相加，得到最终的一键堆叠数量。",
+    "gmcm.one_click_stack_10x": "一键堆叠（10x）",
+    "gmcm.one_click_stack_10x.tooltip": "单次点击时增加的机器数量（10x档位）。该值会与100x和1x档位相加，得到最终的一键堆叠数量。",
+    "gmcm.one_click_stack_1x": "一键堆叠（1x）",
+    "gmcm.one_click_stack_1x.tooltip": "单次点击时增加的机器数量（1x档位）。该值会与100x和10x档位相加，得到最终的一键堆叠数量。设置三者之和为0或1来禁用这个功能。",
+
+    "gmcm.perfect_stack_number": "完美堆叠数值",
+    "gmcm.perfect_stack_number.tooltip": "与一键堆叠功能配合使用。启用后，堆叠数量将自动对齐到一键堆叠的倍数。例如当一键堆叠为5时，堆叠数将变为1、5、10、15等，而不是1、6、11等。",
+
+    "gmcm.position_offset_x": "位置偏移 X",
+    "gmcm.position_offset_x.tooltip": "堆叠数字显示位置的 X 轴偏移量。",
+    "gmcm.position_offset_y": "位置偏移 Y",
+    "gmcm.position_offset_y.tooltip": "堆叠数字显示位置的 Y 轴偏移量。",
 
     "gmcm.opacity": "合并数字透明度",
     "gmcm.opacity.tooltip": "堆叠数量数字的透明度。设为 0 可隐藏。",

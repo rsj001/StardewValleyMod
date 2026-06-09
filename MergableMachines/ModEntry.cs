@@ -37,8 +37,13 @@ namespace MergableMachines
 
         public int gmcmInterval { get; set; } = 60;
         public int maxStack { get; set; } = 99;
-        public int oneClickStack { get; set; } = 1;
+        public int oneClickStack100x { get; set; } = 0;
+        public int oneClickStack10x { get; set; } = 0;
+        public int oneClickStack1x { get; set; } = 1;
         public float NumberOpacity { get; set; } = 0.9f;
+        public int customPositionOffsetX { get; set; } = 0;
+        public int customPositionOffsetY { get; set; } = 0;
+        public bool perfectStackNumber { get; set; } = true;
         public ForceStackMode forceStackMode { get; set; } = ForceStackMode.RequireKey;
         public bool stackTappers { get; set; } = false;
         public HashSet<string> blackList { get; set; } = new HashSet<string>();
@@ -309,7 +314,12 @@ namespace MergableMachines
                             }
                         }
 
-                        int amount = config.oneClickStack;
+                        int oneClickStack = config.oneClickStack100x + config.oneClickStack10x + config.oneClickStack1x;
+                        oneClickStack = Math.Max(oneClickStack, 1);
+                        int amount = oneClickStack;
+                        if (config.perfectStackNumber == true && oneClickStack > 1 && obj.Stack == 1)
+                            amount --;
+                        
                         if (config.quickStack999Keybind.IsDown())
                         {
                             amount = 999;
@@ -397,8 +407,8 @@ namespace MergableMachines
                     //  Crab pots have an animation that makes them float up and down, and they're sort of shifted below the tile they're actually on, so shift our number down as well to compensate
                     // if (__instance is CrabPot)
                     //     QuantityTopLeftPosition.Y += Game1.tileSize - Game1.tileSize / 8;
-
-                    Utility.drawTinyDigits(__instance.Stack, spriteBatch, QuantityTopLeftPosition, Scale, draw_layer + DrawLayerOffset, RenderColor);
+                    Vector2 CustomPositionOffset = new Vector2(config.customPositionOffsetX, config.customPositionOffsetY);
+                    Utility.drawTinyDigits(__instance.Stack, spriteBatch, QuantityTopLeftPosition + CustomPositionOffset, Scale, draw_layer + DrawLayerOffset, RenderColor);
                 }
             }
         }
@@ -504,12 +514,59 @@ namespace MergableMachines
             );
             configMenu.AddNumberOption(
                 mod: this.ModManifest,
-                name: () => G("gmcm.one_click_stack"),
-                tooltip: () => G("gmcm.one_click_stack.tooltip"),
-                getValue: () => config.oneClickStack,
-                setValue: (int val) => config.oneClickStack = val,
-                min: 1,
-                max: 999,
+                name: () => G("gmcm.one_click_stack_100x"),
+                tooltip: () => G("gmcm.one_click_stack_100x.tooltip"),
+                getValue: () => config.oneClickStack100x,
+                setValue: (int val) => config.oneClickStack100x = val,
+                min: 0,
+                max: 900,
+                interval: 100
+            );
+            configMenu.AddNumberOption(
+                mod: this.ModManifest,
+                name: () => G("gmcm.one_click_stack_10x"),
+                tooltip: () => G("gmcm.one_click_stack_10x.tooltip"),
+                getValue: () => config.oneClickStack10x,
+                setValue: (int val) => config.oneClickStack10x = val,
+                min: 0,
+                max: 90,
+                interval: 10
+            );
+            configMenu.AddNumberOption(
+                mod: this.ModManifest,
+                name: () => G("gmcm.one_click_stack_1x"),
+                tooltip: () => G("gmcm.one_click_stack_1x.tooltip"),
+                getValue: () => config.oneClickStack1x,
+                setValue: (int val) => config.oneClickStack1x = val,
+                min: 0,
+                max: 9,
+                interval: 1
+            );
+            configMenu.AddBoolOption(
+                mod: this.ModManifest,
+                name: () => G("gmcm.perfect_stack_number"),
+                tooltip: () => G("gmcm.perfect_stack_number.tooltip"),
+                getValue: () => config.perfectStackNumber,
+                setValue: (bool val) => config.perfectStackNumber = val
+            );
+            configMenu.AddNumberOption(
+                mod: this.ModManifest,
+                name: () => G("gmcm.position_offset_x"),
+                tooltip: () => G("gmcm.position_offset_x.tooltip"),
+                getValue: () => config.customPositionOffsetX,
+                setValue: (int val) => config.customPositionOffsetX = val,
+                min: -100,
+                max: 100,
+                interval: 1
+            );
+            configMenu.AddNumberOption(
+                mod: this.ModManifest,
+                name: () => G("gmcm.position_offset_y"),
+                tooltip: () => G("gmcm.position_offset_y.tooltip"),
+                getValue: () => config.customPositionOffsetY,
+                setValue: (int val) => config.customPositionOffsetY = val,
+                min: -100,
+                max: 100,
                 interval: 1
             );
             configMenu.AddNumberOption(
@@ -548,45 +605,45 @@ namespace MergableMachines
             );
 
             configMenu.AddKeybindList(
-               mod: this.ModManifest,
-               name: () => G("gmcm.force_stack_keybind"),
-               tooltip: () => G("gmcm.force_stack_keybind.tooltip"),
-               getValue: () => config.forceStackKeybind,
-               setValue: value => config.forceStackKeybind = value
-           );
+                mod: this.ModManifest,
+                name: () => G("gmcm.force_stack_keybind"),
+                tooltip: () => G("gmcm.force_stack_keybind.tooltip"),
+                getValue: () => config.forceStackKeybind,
+                setValue: value => config.forceStackKeybind = value
+            );
 
             configMenu.AddBoolOption(
-                 mod: this.ModManifest,
-                 name: () => G("gmcm.stack_tappers"),
-                 tooltip: () => G("gmcm.stack_tappers.tooltip"),
-                 getValue: () => config.stackTappers,
-                 setValue: value => config.stackTappers = value
+                mod: this.ModManifest,
+                name: () => G("gmcm.stack_tappers"),
+                tooltip: () => G("gmcm.stack_tappers.tooltip"),
+                getValue: () => config.stackTappers,
+                setValue: value => config.stackTappers = value
             );
 
             configMenu.AddSectionTitle(
-                 mod: this.ModManifest,
-                 text: () => G("gmcm.quickstack")
+                mod: this.ModManifest,
+                text: () => G("gmcm.quickstack")
             );
             configMenu.AddKeybindList(
-                 mod: this.ModManifest,
-                 name: () => G("gmcm.quickstack999_keybind"),
-                 tooltip: () => G("gmcm.quickstack999_keybind.tooltip"),
-                 getValue: () => config.quickStack999Keybind,
-                 setValue: value => config.quickStack999Keybind = value
+                mod: this.ModManifest,
+                name: () => G("gmcm.quickstack999_keybind"),
+                tooltip: () => G("gmcm.quickstack999_keybind.tooltip"),
+                getValue: () => config.quickStack999Keybind,
+                setValue: value => config.quickStack999Keybind = value
             );
             configMenu.AddKeybindList(
-                 mod: this.ModManifest,
-                 name: () => G("gmcm.quickstack25_keybind"),
-                 tooltip: () => G("gmcm.quickstack25_keybind.tooltip"),
-                 getValue: () => config.quickStack25Keybind,
-                 setValue: value => config.quickStack25Keybind = value
+                mod: this.ModManifest,
+                name: () => G("gmcm.quickstack25_keybind"),
+                tooltip: () => G("gmcm.quickstack25_keybind.tooltip"),
+                getValue: () => config.quickStack25Keybind,
+                setValue: value => config.quickStack25Keybind = value
             );
             configMenu.AddKeybindList(
-                 mod: this.ModManifest,
-                 name: () => G("gmcm.quickstack5_keybind"),
-                 tooltip: () => G("gmcm.quickstack5_keybind.tooltip"),
-                 getValue: () => config.quickStack5Keybind,
-                 setValue: value => config.quickStack5Keybind = value
+                mod: this.ModManifest,
+                name: () => G("gmcm.quickstack5_keybind"),
+                tooltip: () => G("gmcm.quickstack5_keybind.tooltip"),
+                getValue: () => config.quickStack5Keybind,
+                setValue: value => config.quickStack5Keybind = value
             );
 
             configMenu.AddSectionTitle(

@@ -6,8 +6,20 @@
     "gmcm.max_stack": "Taille maximale de fusion",
     "gmcm.max_stack.tooltip": "Nombre maximal de machines dans une même pile. Réglez sur 1 pour désactiver la fusion.",
 
-    "gmcm.one_click_stack": "Empilement à un clic",
-    "gmcm.one_click_stack.tooltip": "Nombre de machines à empiler en un seul clic.",
+    "gmcm.one_click_stack_100x": "Empilement en un clic (100x)",
+    "gmcm.one_click_stack_100x.tooltip": "Nombre de machines ajoutées par clic (palier 100x). Cette valeur s'ajoute aux options 1x et 10x pour obtenir le total final de l'empilement en un clic.",
+    "gmcm.one_click_stack_10x": "Empilement en un clic (10x)",
+    "gmcm.one_click_stack_10x.tooltip": "Nombre de machines ajoutées par clic (palier 10x). Cette valeur s'ajoute aux options 100x et 1x pour obtenir le total final de l'empilement en un clic.",
+    "gmcm.one_click_stack_1x": "Empilement en un clic (1x)",
+    "gmcm.one_click_stack_1x.tooltip": "Nombre de machines ajoutées par clic (palier 1x). Cette valeur s'ajoute aux options 100x et 10x pour obtenir le total final de l'empilement en un clic. Mettre la somme à 0 ou 1 permet de revenir au comportement d'origine.",
+
+    "gmcm.perfect_stack_number": "Nombre d'empilement parfait",
+    "gmcm.perfect_stack_number.tooltip": "Fonctionne avec l'empilement en un clic. Activé, le nombre d'empilements s'aligne sur un multiple de la valeur de l'empilement en un clic. Par exemple, si la valeur est 5, les nombres seront 1, 5, 10, 15, etc. au lieu de 1, 6, 11, etc.",
+
+    "gmcm.position_offset_x": "Décalage de position X",
+    "gmcm.position_offset_x.tooltip": "Décalage horizontal (axe X) de l'affichage du nombre d'empilements.",
+    "gmcm.position_offset_y": "Décalage de position Y",
+    "gmcm.position_offset_y.tooltip": "Décalage vertical (axe Y) de l'affichage du nombre d'empilements.",
 
     "gmcm.opacity": "Opacité du nombre de pile",
     "gmcm.opacity.tooltip": "Opacité du nombre indiquant la taille de la pile. Réglez sur 0 pour le masquer.",

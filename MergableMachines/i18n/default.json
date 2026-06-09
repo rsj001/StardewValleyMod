@@ -6,9 +6,21 @@
     "gmcm.max_stack": "Max Merge Size",
     "gmcm.max_stack.tooltip": "Maximum machines in one stack. Set to 1 to disable merging.",
 
-    "gmcm.one_click_stack": "One-Click Stack",
-    "gmcm.one_click_stack.tooltip": "Number of machines to stack when click once.",
+    "gmcm.one_click_stack_100x": "One-Click Stack (100x)",
+    "gmcm.one_click_stack_100x.tooltip": "Number of machines to stack when click once (100x). This will add with the 1x and 10x option to get the final one-click stack number.",
+    "gmcm.one_click_stack_10x": "One-Click Stack (10x)",
+    "gmcm.one_click_stack_10x.tooltip": "Number of machines to stack when click once (10x). This will add with the 100x and 1x options to get the final one-click stack number.",
+    "gmcm.one_click_stack_1x": "One-Click Stack (1x)",
+    "gmcm.one_click_stack_1x.tooltip": "Number of machines to stack when click once (1x). This will add with the 100x and 10x options to get the final one-click stack number. Set the sum to 0 or 1 to have the old behavior.",
+    
+    "gmcm.perfect_stack_number": "Perfect Stack Number",
+    "gmcm.perfect_stack_number.tooltip": "Works with one-click stack. If enabled, the stack number will align to the multiple of the one-click stack. For example, if one-click is 5, the stack number will be 1, 5, 10, 15, etc. instead of 1, 6, 11, etc.",
 
+    "gmcm.position_offset_x": "Position Offset X",
+    "gmcm.position_offset_x.tooltip": "X offset for the stack number position.",
+    "gmcm.position_offset_y": "Position Offset Y",
+    "gmcm.position_offset_y.tooltip": "Y offset for the stack number position.",
+    
     "gmcm.opacity": "Merge Digit Opacity",
     "gmcm.opacity.tooltip": "Opacity of the stack number. Set to 0 to hide it.",
 
