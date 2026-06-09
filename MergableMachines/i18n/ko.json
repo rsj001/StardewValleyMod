@@ -5,6 +5,10 @@
   "machine_occupied": "이 기계는 지금 사용 중입니다.",
   "gmcm.max_stack": "최대 병합 개수",
   "gmcm.max_stack.tooltip": "한 묶음으로 병합할 수 있는 기계의 최대 개수입니다. 1로 설정하면 병합이 비활성화됩니다.",
+
+  "gmcm.one_click_stack": "한 번 클릭 시 병합 개수",
+  "gmcm.one_click_stack.tooltip": "한 번 클릭할 때 병합할 기계의 개수를 설정합니다.",
+
   "gmcm.opacity": "병합 숫자 불투명도",
   "gmcm.opacity.tooltip": "병합 개수 숫자의 불투명도를 설정합니다. 0으로 설정하면 숨겨집니다.",
 

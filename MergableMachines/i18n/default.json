@@ -5,6 +5,10 @@
     "machine_occupied": "This machine is busy right now.",
     "gmcm.max_stack": "Max Merge Size",
     "gmcm.max_stack.tooltip": "Maximum machines in one stack. Set to 1 to disable merging.",
+
+    "gmcm.one_click_stack": "One-Click Stack",
+    "gmcm.one_click_stack.tooltip": "Number of machines to stack when click once.",
+
     "gmcm.opacity": "Merge Digit Opacity",
     "gmcm.opacity.tooltip": "Opacity of the stack number. Set to 0 to hide it.",
 

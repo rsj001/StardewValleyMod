@@ -5,6 +5,10 @@
     "machine_occupied": "这台机器现在正忙着工作。",
     "gmcm.max_stack": "最大合并数量",
     "gmcm.max_stack.tooltip": "一组最多可以合并多少台机器。设为 1 可禁用合并。",
+
+    "gmcm.one_click_stack": "单击堆叠数量",
+    "gmcm.one_click_stack.tooltip": "单击一次堆叠的机器数量",
+
     "gmcm.opacity": "合并数字透明度",
     "gmcm.opacity.tooltip": "堆叠数量数字的透明度。设为 0 可隐藏。",
 
